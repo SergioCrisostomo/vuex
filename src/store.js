@@ -43,6 +43,17 @@ export class Store {
       return dispatch.call(store, type, payload)
     }
     this.commit = function boundCommit (type, payload, options) {
+      if (strict && process.env.NODE_ENV !== 'production') {
+        const path = type.split('/')
+        const property = path.pop()
+        const moduleRoot = getNestedState(store.state, path)
+
+        if (!moduleRoot.hasOwnProperty(property)) {
+          console.error(`[vuex] state: The property '${type}' must be defined in the state object.`)
+          throw new Error('********')
+        }
+      }
+
       return commit.call(store, type, payload, options)
     }
 

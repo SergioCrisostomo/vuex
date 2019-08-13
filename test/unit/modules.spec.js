@@ -6,6 +6,8 @@ const TEST = 'TEST'
 describe('Modules', () => {
   describe('module registration', () => {
     it('dynamic module registration', () => {
+      console.log('\nregistration')
+
       const store = new Vuex.Store({
         strict: true,
         modules: {
@@ -26,13 +28,18 @@ describe('Modules', () => {
         })
       }).not.toThrow()
 
+      console.log('A')
       expect(store._mutations.inc.length).toBe(2)
       expect(store.state.hi.a).toBe(1)
       expect(store.getters.a).toBe(1)
 
+      console.log('B')
+
       // assert initial modules work as expected after dynamic registration
       expect(store.state.foo.bar).toBe(1)
       expect(store.getters.bar).toBe(1)
+
+      console.log('C')
 
       // test dispatching actions defined in dynamic module
       store.dispatch('inc')
@@ -41,6 +48,8 @@ describe('Modules', () => {
       expect(store.state.foo.bar).toBe(2)
       expect(store.getters.bar).toBe(2)
 
+      console.log('D')
+
       // unregister
       store.unregisterModule('hi')
       expect(store.state.hi).toBeUndefined()
@@ -48,13 +57,18 @@ describe('Modules', () => {
       expect(store._mutations.inc.length).toBe(1)
       expect(store._actions.inc).toBeUndefined()
 
+      console.log('E')
+
       // assert initial modules still work as expected after unregister
       store.dispatch('incFoo')
       expect(store.state.foo.bar).toBe(3)
       expect(store.getters.bar).toBe(3)
+      console.log('\ndone')
     })
 
     it('dynamic module registration with namespace inheritance', () => {
+      console.log('\niheritance')
+
       const store = new Vuex.Store({
         modules: {
           a: {
@@ -79,9 +93,11 @@ describe('Modules', () => {
 
       store.commit('a/foo')
       expect(mutationSpy).toHaveBeenCalled()
+      console.log('\ndone')
     })
 
     it('dynamic module registration preserving hydration', () => {
+      console.log('\nhydratation')
       const store = new Vuex.Store({})
       store.replaceState({ a: { foo: 'state' }})
       const actionSpy = jasmine.createSpy()
@@ -101,6 +117,7 @@ describe('Modules', () => {
 
       store.commit('a/foo')
       expect(mutationSpy).toHaveBeenCalled()
+      console.log('\ndone')
     })
   })
 
